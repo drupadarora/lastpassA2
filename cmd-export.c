@@ -60,7 +60,7 @@ int cmd_export(int argc, char **argv)
 
 	while ((option = getopt_long(argc, argv, "c", long_options, &option_index)) != -1) {
 		switch (option) {
-			case 'S':
+			case 'S': 
 				sync = parse_sync_string(optarg);
 				break;
 			case 'C':
@@ -94,8 +94,8 @@ int cmd_export(int argc, char **argv)
 	list_for_each_entry(account, &blob->account_head, list) {
 
 		/* skip shared notes */
-		if (!strcmp(account->url, "http://sn"))
-			continue;
+		/*if (!strcmp(account->url, "http://sn"))
+			continue;*/
 
 		lastpass_log_access(sync, session, key, account);
 		print_csv_cell(account->url, false);
@@ -104,7 +104,14 @@ int cmd_export(int argc, char **argv)
 		print_csv_cell(account->fullname, false);
 		print_csv_cell(account->name, false);
 		print_csv_cell(account->group, true);
+		print_csv_cell(account->note, false);
+
 	}
+
+	printf("Secured  Notes:\n");
+       list_for_each_entry(account, &blob->account_head, list){
+		print_csv_cell(account->note,false);
+       }
 
 	session_free(session);
 	blob_free(blob);
